@@ -65,7 +65,7 @@ class MoneyInput extends TextInput
                 );
 
                 if ($value < $min) {
-                    $fail('The :attribute must be greater than ' . $min . '.');
+                    $fail('The :attribute must be greater than or equal to ' . $min . '.');
                 }
             };
         });
@@ -85,7 +85,7 @@ class MoneyInput extends TextInput
                 );
 
                 if ($value > $max) {
-                    $fail('The :attribute must be less than ' . $max . '.');
+                    $fail('The :attribute must be less than or equal to ' . $max . '.');
                 }
             };
         });
