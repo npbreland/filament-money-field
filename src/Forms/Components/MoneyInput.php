@@ -15,6 +15,27 @@ class MoneyInput extends TextInput
     {
         parent::setUp();
 
+        $this->rules([
+            function () {
+                return function (string $attribute, $value, \Closure $fail) {
+                    $value = MoneyFormatter::parseDecimal(
+                        $value, 
+                        'USD',
+                        'en_US'
+                    );
+
+                    if ($value < 0) {
+                        $fail('The :attribute must be greater than 0.');
+                    } 
+                    if ($value > 4_294_967_295) {
+                        $fail('The :attribute must be less than ' . 4_294_967_295 . '.');
+                    }
+                };
+            }
+        ]);
+
+
+
         $this->formatStateUsing(function (MoneyInput $component, $state): ?string {
             
             $this->prepare($component);
@@ -33,26 +54,6 @@ class MoneyInput extends TextInput
         });
 
         $this->dehydrateStateUsing(function (MoneyInput $component, $state): string {
-
-            $this->rules([
-                function () use ($component) {
-                    return function (string $attribute, $value, \Closure $fail) use ($component) {
-                        $value = MoneyFormatter::parseDecimal(
-                            $value, 
-                            $component->getCurrency()->getCode(),
-                            $component->getLocale()
-                        );
-
-                        if ($value < 0) {
-                            $fail('The :attribute must be greater than 0.');
-                        } 
-                        if ($value > 4_294_967_295) {
-                            $fail('The :attribute must be less than ' . 4_294_967_295 . '.');
-                        }
-                    };
-                }
-            ]);
-
 
             $currency = $component->getCurrency()->getCode();
             $state = MoneyFormatter::parseDecimal($state, $currency, $component->getLocale());
