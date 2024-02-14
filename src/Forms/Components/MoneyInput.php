@@ -15,24 +15,24 @@ class MoneyInput extends TextInput
     {
         parent::setUp();
 
-        $this->rules([
-            function () {
-                return function (string $attribute, $value, \Closure $fail) {
-                    $value = MoneyFormatter::parseDecimal(
-                        $value, 
-                        'USD',
-                        'en_US'
-                    );
+        /* $this->rules([ */
+        /*     function () { */
+        /*         return function (string $attribute, $value, \Closure $fail) { */
+        /*             $value = MoneyFormatter::parseDecimal( */
+        /*                 $value, */ 
+        /*                 'USD', */
+        /*                 'en_US' */
+        /*             ); */
 
-                    if ($value < 0) {
-                        $fail('The :attribute must be greater than 0.');
-                    } 
-                    if ($value > 4_294_967_295) {
-                        $fail('The :attribute must be less than ' . 4_294_967_295 . '.');
-                    }
-                };
-            }
-        ]);
+                    /* if ($value < 0) { */
+                    /*     $fail('The :attribute must be greater than 0.'); */
+                    /* } */ 
+                    /* if ($value > 4_294_967_295) { */
+                    /*     $fail('The :attribute must be less than ' . 4_294_967_295 . '.'); */
+                    /* } */
+                /* }; */
+            /* } */
+        /* ]); */
 
 
 
