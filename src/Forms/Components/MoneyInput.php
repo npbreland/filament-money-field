@@ -64,8 +64,8 @@ class MoneyInput extends TextInput
                     $component->getLocale()
                 );
 
-                if ($value > $min) {
-                    $fail('The :attribute must be less than ' . $min . '.');
+                if ($value < $min) {
+                    $fail('The :attribute must be greater than ' . $min . '.');
                 }
             };
         });
