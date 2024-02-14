@@ -99,7 +99,7 @@ class MoneyInput extends TextInput
                 );
 
                 if ($value > $max) {
-                    $fail(__($component->getValidationMessages()['max'], ['attribute' => $component->getValidationAttribute(), 'max' => $max]));
+                    $fail('The :attribute must be less than ' . $max . '.');
                 }
             };
         });
