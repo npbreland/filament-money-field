@@ -15,27 +15,6 @@ class MoneyInput extends TextInput
     {
         parent::setUp();
 
-        /* $this->rules([ */
-        /*     function () { */
-        /*         return function (string $attribute, $value, \Closure $fail) { */
-        /*             $value = MoneyFormatter::parseDecimal( */
-        /*                 $value, */ 
-        /*                 'USD', */
-        /*                 'en_US' */
-        /*             ); */
-
-                    /* if ($value < 0) { */
-                    /*     $fail('The :attribute must be greater than 0.'); */
-                    /* } */ 
-                    /* if ($value > 4_294_967_295) { */
-                    /*     $fail('The :attribute must be less than ' . 4_294_967_295 . '.'); */
-                    /* } */
-                /* }; */
-            /* } */
-        /* ]); */
-
-
-
         $this->formatStateUsing(function (MoneyInput $component, $state): ?string {
             
             $this->prepare($component);
@@ -72,5 +51,39 @@ class MoneyInput extends TextInput
         if (config('filament-money-field.use_input_mask')) {
             $this->mask(RawJs::make('$money($input, \'' . $formattingRules->decimalSeparator . '\', \'' . $formattingRules->groupingSeparator . '\', ' . $formattingRules->fractionDigits . ')'));
         }
+    }
+
+    public function maxValue($max): static
+    {
+        $this->rule('max_value', function ($attribute, $value, $fail) use ($max) {
+
+            $value = MoneyFormatter::parseDecimal(
+                $value, 
+                $this->getCurrency()->getCode(),
+                $this->getLocale()
+            );
+
+            if ($value > $max) {
+                $fail('The :attribute must be less than ' . $max . '.');
+            }
+        });
+        return $this;
+    }
+
+    public function minValue($min): static
+    {
+        $this->rule('min_value', function ($attribute, $value, $fail) use ($min) {
+
+            $value = MoneyFormatter::parseDecimal(
+                $value, 
+                $this->getCurrency()->getCode(),
+                $this->getLocale()
+            );
+
+            if ($value < $min) {
+                $fail('The :attribute must be greater than ' . $min . '.');
+            }
+        });
+        return $this;
     }
 }
