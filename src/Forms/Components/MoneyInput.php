@@ -53,41 +53,27 @@ class MoneyInput extends TextInput
         }
     }
 
-    /* public function maxValue($max): static */
-    /* { */
-    /*     $this->rule('max_value', function ($attribute, $value, $fail) use ($max) { */
+    public function minValue(mixed $min): static
+    {
+        $this->rule(static function (MoneyInput $component, mixed $state) use ($min) {
+            return function (string $attribute, mixed $value, \Closure $fail) use ($component, $state, $min) {
 
-    /*         $value = MoneyFormatter::parseDecimal( */
-    /*             $value, */ 
-    /*             $this->getCurrency()->getCode(), */
-    /*             $this->getLocale() */
-    /*         ); */
+                $value = MoneyFormatter::parseDecimal(
+                    $state, 
+                    $component->getCurrency()->getCode(),
+                    $component->getLocale()
+                );
 
-    /*         if ($value > $max) { */
-    /*             $fail('The :attribute must be less than ' . $max . '.'); */
-    /*         } */
-    /*     }); */
-    /*     return $this; */
-    /* } */
+                if ($value > $min) {
+                    $fail('The :attribute must be less than ' . $min . '.');
+                }
+            };
+        });
 
-    /* public function minValue($min): static */
-    /* { */
-    /*     $this->rule('min_value', function ($attribute, $value, $fail) use ($min) { */
+        return $this;
+    }
 
-    /*         $value = MoneyFormatter::parseDecimal( */
-    /*             $value, */ 
-    /*             $this->getCurrency()->getCode(), */
-    /*             $this->getLocale() */
-    /*         ); */
-
-    /*         if ($value < $min) { */
-    /*             $fail("The :attribute must be greater than " . $min . '.'); */
-    /*         } */
-    /*     }); */
-    /*     return $this; */
-    /* } */
-
-    public function maxValue($max): static
+    public function maxValue(mixed $max): static
     {
         $this->rule(static function (MoneyInput $component, mixed $state) use ($max) {
             return function (string $attribute, mixed $value, \Closure $fail) use ($component, $state, $max) {
